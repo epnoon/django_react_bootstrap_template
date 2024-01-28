@@ -1,0 +1,10 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load render_bundle from webpack_loader %}
+
+{% block breadcrumbs %}{% endblock breadcrumbs %}
+
+{% block content %}
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+{% endblock %}
