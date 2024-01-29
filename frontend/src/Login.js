@@ -14,7 +14,8 @@ export default function Login() {
   const [response, setResponse] = useState({ fetching: false, data: null });
   const postLogin = usePostLogin();
 
-  function submit() {
+  function submit(event) {
+    event.preventDefault();
     setResponse({ ...response, fetching: true });
     postLogin({ login: email, password })
       .then((data) => {
@@ -33,9 +34,9 @@ export default function Login() {
       });
   }
   if (response?.data?.location === URLs.CONFIRM_EMAIL) {
-    return <Navigate to="/confirm-email" />;
+    return <Navigate to="/confirm-email/" />;
   } else if (response?.data?.location === URLs.PROFILE) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to="/dashboard/" />;
   }
 
   return (
@@ -76,7 +77,7 @@ export default function Login() {
                 className="btn-block mt-3"
                 variant="primary"
                 type="submit"
-                block
+                disabled={response.fetching}
               >
                 Login
               </Button>

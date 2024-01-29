@@ -81,7 +81,9 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+], {
+    basename: "/accounts",
+});
 
 function Root() {
   return (

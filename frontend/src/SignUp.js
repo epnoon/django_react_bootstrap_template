@@ -13,9 +13,16 @@ export default function Login() {
   const [password2, setPassword2] = useState("");
   const [response, setResponse] = useState({ fetching: false, data: null });
 
-  function submit() {
+  function submit(event) {
+    event.preventDefault();
     setResponse({ ...response, fetching: true });
-    postSignUp({ email, password1, password2 })
+    postSignUp({
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      password1,
+      password2,
+    })
       .then((data) => {
         setResponse((r) => {
           return { ...r, data };
@@ -32,8 +39,9 @@ export default function Login() {
       });
   }
 
+    console.log(response?.data?.location);
   if (response?.data?.location === URLs.CONFIRM_EMAIL) {
-    return <Navigate to="/confirm-email" />;
+    return <Navigate to="/confirm-email/" />;
   }
   return (
     <Container className="mt-5">
@@ -42,7 +50,7 @@ export default function Login() {
           <h2 className="mb-4 text-center">Sign up</h2>
           <FormErrors errors={response?.data?.form?.errors} />
 
-          <Form>
+          <Form onSubmit={submit}>
             <Row>
               <Col xs={12} md={6}>
                 <Form.Group controlId="formFirstName" className="mb-2">
@@ -56,7 +64,7 @@ export default function Login() {
                   />
 
                   <FormErrors
-                    errors={response?.data?.form?.fields?.email?.errors}
+                    errors={response?.data?.form?.fields?.first_name?.errors}
                   />
                 </Form.Group>
               </Col>{" "}
@@ -72,7 +80,7 @@ export default function Login() {
                   />
 
                   <FormErrors
-                    errors={response?.data?.form?.fields?.email?.errors}
+                    errors={response?.data?.form?.fields?.last_name?.errors}
                   />
                 </Form.Group>
               </Col>
@@ -124,10 +132,8 @@ export default function Login() {
             <Button
               className="mt-2"
               variant="primary"
-              type="button"
+              type="submit"
               disabled={response.fetching}
-              onClick={() => submit()}
-              block
             >
               {response.fetching ? "Signing Up..." : "Sign Up"}
             </Button>

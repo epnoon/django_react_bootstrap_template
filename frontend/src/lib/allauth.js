@@ -1,4 +1,5 @@
 import { getCSRFToken } from "./django";
+import axios from "axios";
 
 const BASE_URL = "/accounts";
 const ACCEPT_JSON = {
@@ -24,18 +25,19 @@ async function fetchFormPost(path, data) {
   });
   formData.append("csrfmiddlewaretoken", getCSRFToken());
 
-  const resp = await fetch(path, {
-    method: "POST",
+  const resp = await axios({
+    method: "post",
+    url: path,
+    data: formData,
     headers: {
       ...ACCEPT_JSON,
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: new URLSearchParams(formData).toString(),
   });
-  if (!resp.ok && ![400, 404].includes(resp.status)) {
+  if (resp.statusText != "OK"  && ![400, 404].includes(resp.status)) {
     throw new Error("error submitting data");
   }
-  return await resp.json();
+  return await resp.data;
 }
 
 export async function postLogin(data) {
